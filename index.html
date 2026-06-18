@@ -122,24 +122,38 @@ nav.stuck {
   display: flex; align-items: center; justify-content: flex-start;
   padding: 0 64px; overflow: hidden;
 }
+.hero-photo-layer {
+  position: absolute; inset: 0; z-index: 0;
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+}
+.hero-photo-layer div {
+  background-size: cover; background-position: center 20%;
+  filter: grayscale(35%) contrast(1.08) brightness(0.85);
+  transform: scale(1.02);
+}
+.hero-ph1 { background-image: url('img/img6.jpg'); }
+.hero-ph2 { background-image: url('img/img3.jpg'); background-position: center 15%; }
+.hero-ph3 { background-image: url('img/img2.jpg'); }
 canvas#particles {
-  position: absolute; inset: 0; z-index: 0; opacity: 0.55;
+  position: absolute; inset: 0; z-index: 1; opacity: 0.65;
 }
 .hero-grid-lines {
-  position: absolute; inset: 0; z-index: 0;
+  position: absolute; inset: 0; z-index: 1;
   background:
     repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(200,168,75,0.04) 79px, rgba(200,168,75,0.04) 80px),
     repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(200,168,75,0.03) 79px, rgba(200,168,75,0.03) 80px);
 }
 .hero-vignette {
   position: absolute; inset: 0; z-index: 1;
-  background: radial-gradient(ellipse at 60% 50%, transparent 30%, rgba(12,12,12,0.7) 100%);
+  background: linear-gradient(90deg, rgba(12,12,12,0.97) 0%, rgba(12,12,12,0.88) 35%, rgba(12,12,12,0.55) 60%, rgba(12,12,12,0.4) 100%),
+              linear-gradient(180deg, rgba(12,12,12,0.5) 0%, transparent 30%, transparent 70%, rgba(12,12,12,0.8) 100%);
 }
 .hero-right-accent {
   position: absolute; right: 0; top: 0; bottom: 0; width: 38%;
-  background: linear-gradient(135deg, transparent 0%, rgba(25,40,64,0.45) 50%, rgba(107,31,42,0.15) 100%);
+  background: linear-gradient(135deg, transparent 0%, rgba(25,40,64,0.25) 50%, rgba(107,31,42,0.1) 100%);
   z-index: 1;
   clip-path: polygon(12% 0, 100% 0, 100% 100%, 0% 100%);
+  pointer-events: none;
 }
 .hero-content { position: relative; z-index: 2; max-width: 720px; }
 .hero-tag {
@@ -363,24 +377,28 @@ canvas#particles {
 }
 .id-card-bg {
   position: absolute; inset: 0;
+  background-size: cover; background-position: center 15%;
   transition: transform 0.6s;
+  filter: grayscale(15%) contrast(1.05);
 }
 .id-card:hover .id-card-bg { transform: scale(1.06); }
 .id-card.a {
   top: 0; left: 0; width: 60%; height: 55%;
-  background: linear-gradient(145deg, var(--navy), #0d1f3a);
 }
 .id-card.b {
   top: 0; right: 0; width: 36%; height: 35%;
-  background: linear-gradient(145deg, var(--wine), #3d0f18);
 }
 .id-card.c {
   bottom: 0; left: 0; width: 36%; height: 42%;
-  background: linear-gradient(145deg, #1e1e1e, #111);
 }
 .id-card.d {
   bottom: 0; right: 0; width: 60%; height: 58%;
   background: linear-gradient(145deg, #1a1a1a, #0c0c0c);
+}
+.id-card.a::after, .id-card.b::after, .id-card.c::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(12,12,12,0.05) 30%, rgba(12,12,12,0.85) 100%);
 }
 .id-card.a .id-card-label { color: var(--gold); }
 .id-card.d .id-card-label { color: var(--gold); }
@@ -410,6 +428,8 @@ canvas#particles {
   scroll-snap-align: start;
   position: relative; overflow: hidden;
   cursor: none;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease-out;
 }
 .perfil-inner {
   position: absolute; inset: 0;
@@ -420,21 +440,19 @@ canvas#particles {
 .perfil:hover .perfil-inner { transform: scale(1.03); }
 .perfil-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(12,12,12,0.1) 0%, rgba(12,12,12,0.88) 100%);
+  background: linear-gradient(180deg, rgba(12,12,12,0.15) 0%, rgba(12,12,12,0.55) 55%, rgba(12,12,12,0.94) 100%);
   transition: background 0.4s;
 }
 .perfil:hover .perfil-overlay {
-  background: linear-gradient(180deg, rgba(12,12,12,0.05) 0%, rgba(25,40,64,0.92) 100%);
+  background: linear-gradient(180deg, rgba(12,12,12,0.1) 0%, rgba(25,40,64,0.5) 55%, rgba(12,12,12,0.95) 100%);
 }
 .perfil-bg {
   position: absolute; inset: 0;
-  background-size: cover; background-position: center;
+  background-size: cover; background-position: center 12%;
+  filter: grayscale(10%) contrast(1.05);
+  transition: transform 0.6s;
 }
-.p-bg1 { background: linear-gradient(145deg, #0f1f3a 0%, #1b2a4a 40%, #0d1828 100%); }
-.p-bg2 { background: linear-gradient(145deg, #1a0a0f 0%, #3d1520 40%, #220a10 100%); }
-.p-bg3 { background: linear-gradient(145deg, #0a100a 0%, #1a2e1a 40%, #0f1c0f 100%); }
-.p-bg4 { background: linear-gradient(145deg, #100a0a 0%, #2e1a0a 40%, #1c1008 100%); }
-.p-bg5 { background: linear-gradient(145deg, #0c0c14 0%, #1c1c2e 40%, #0a0a18 100%); }
+.perfil:hover .perfil-bg { transform: scale(1.05); }
 
 /* Fake texture overlay */
 .perfil-texture {
@@ -482,6 +500,38 @@ canvas#particles {
   color: var(--grey); display: flex; align-items: center; gap: 8px;
 }
 .perfis-hint::after { content: '→'; color: var(--gold); }
+
+/* ══ CAROUSEL NAV ARROWS ══ */
+.carousel-arrows {
+  display: flex; gap: 8px;
+}
+.carousel-arrow {
+  width: 44px; height: 44px;
+  border: 1px solid rgba(244,242,238,0.18);
+  background: transparent;
+  color: var(--ice);
+  display: flex; align-items: center; justify-content: center;
+  cursor: none;
+  font-size: 16px;
+  transition: border-color 0.3s, background 0.3s, color 0.3s;
+}
+.carousel-arrow:hover {
+  border-color: var(--gold);
+  background: rgba(200,168,75,0.1);
+  color: var(--gold);
+}
+.carousel-arrow:disabled {
+  opacity: 0.25; pointer-events: none;
+}
+.carousel-arrow-dark {
+  border-color: rgba(12,12,12,0.18);
+  color: var(--ink);
+}
+.carousel-arrow-dark:hover {
+  border-color: var(--gold-lo);
+  background: rgba(200,168,75,0.08);
+  color: var(--gold-lo);
+}
 
 /* ══ SECTION 4: KING JOE (FEATURE) ══ */
 #kingjoe {
@@ -552,20 +602,32 @@ canvas#particles {
 }
 .kj-main-card {
   position: absolute; top: 0; left: 0; right: 0; bottom: 80px;
-  background: linear-gradient(145deg, var(--navy) 0%, #0d1e38 60%, #1B2A4A 100%);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
   overflow: hidden;
+  display: flex; align-items: flex-end; justify-content: flex-start;
 }
+.kj-main-photo {
+  position: absolute; inset: 0;
+  background-image: url('img/img5.jpg');
+  background-size: cover; background-position: center 18%;
+  filter: contrast(1.08) saturate(1.05);
+  transition: transform 8s ease;
+}
+.kj-main-card:hover .kj-main-photo { transform: scale(1.07); }
 .kj-main-card::before {
   content: '';
   position: absolute; inset: 0;
-  background: radial-gradient(circle at 50% 40%, rgba(200,168,75,0.1), transparent 65%);
+  background: linear-gradient(180deg, rgba(25,40,64,0.15) 0%, rgba(12,12,12,0.25) 60%, rgba(12,12,12,0.85) 100%);
+  z-index: 1;
+}
+.kj-tag-floating {
+  position: relative; z-index: 2;
+  padding: 28px;
 }
 .kj-logo-display {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 80px; letter-spacing: 10px;
-  color: rgba(244,242,238,0.08);
-  position: absolute; bottom: 20px; right: 24px;
+  font-size: 56px; letter-spacing: 8px;
+  color: rgba(255,255,255,0.85);
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
 }
 .kj-center-icon { font-size: 60px; opacity: 0.6; position: relative; z-index: 2; margin-bottom: 20px; }
 .kj-center-text {
@@ -630,7 +692,14 @@ canvas#particles {
   font-size: 11px; font-weight: 300; color: #999;
 }
 .mat-content { display: none; }
-.mat-content.active { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.mat-content.active {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+  animation: matFadeIn 0.45s ease;
+}
+@keyframes matFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 .mat-info {}
 .mat-headline {
   font-family: 'Playfair Display', serif;
@@ -815,6 +884,7 @@ canvas#particles {
   overflow: hidden;
 }
 .looks-head { margin-bottom: 52px; padding-right: 64px; display: flex; align-items: flex-end; justify-content: space-between; }
+.looks-head > div[style] { padding-right: 0 !important; }
 .looks-track {
   display: flex; gap: 16px;
   overflow-x: auto; padding-right: 64px;
@@ -836,6 +906,7 @@ canvas#particles {
 .look-bg {
   position: absolute; inset: 0;
   background-size: cover; background-position: center top;
+  filter: grayscale(8%) contrast(1.05);
   transition: transform 0.6s cubic-bezier(.4,0,.2,1);
 }
 .look-card:hover .look-bg { transform: scale(1.06); }
@@ -861,13 +932,85 @@ canvas#particles {
   font-family: 'Inter', sans-serif;
   font-size: 12px; font-weight: 300; color: var(--grey-hi); line-height: 1.6;
 }
-.lbg1 { background: linear-gradient(145deg, #0f1f3a, #1b2a4a, #192a44); }
-.lbg2 { background: linear-gradient(145deg, #1e1416, #2e1a1e, #1a0f12); }
-.lbg3 { background: linear-gradient(145deg, #0e1a0e, #1e2e1e, #141e14); }
-.lbg4 { background: linear-gradient(145deg, #1e1a0e, #2e260e, #1a1608); }
-.lbg5 { background: linear-gradient(145deg, #0e0e1a, #1a1a2e, #101018); }
 
-/* ══ SECTION 8: DEPOIMENTOS ══ */
+
+/* ══ SECTION: GALERIA PROVADOR ══ */
+#galeria {
+  background: var(--ice);
+  padding: 100px 64px 120px;
+}
+.galeria-head { margin-bottom: 48px; }
+.galeria-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 200px;
+  gap: 6px;
+}
+.gal-item {
+  position: relative; overflow: hidden;
+  cursor: none;
+  background: #ccc;
+}
+.gal-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+.gal-item:nth-child(4) { grid-row: span 2; }
+.gal-item:nth-child(7) { grid-column: span 2; }
+.gal-img {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center 12%;
+  transition: transform 0.5s ease;
+  filter: grayscale(5%) contrast(1.05);
+}
+.gal-item:hover .gal-img { transform: scale(1.08); }
+.gal-shade {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(12,12,12,0.65) 100%);
+  opacity: 0; transition: opacity 0.3s;
+}
+.gal-item:hover .gal-shade { opacity: 1; }
+.gal-label {
+  position: absolute; bottom: 14px; left: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--ice);
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.gal-item:hover .gal-label { opacity: 1; transform: translateY(0); }
+
+/* ══ LIGHTBOX ══ */
+.lightbox {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(6,6,6,0.96);
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 40px;
+  cursor: none;
+}
+.lightbox.open { display: flex; animation: lbFade 0.3s ease; }
+@keyframes lbFade { from { opacity: 0; } to { opacity: 1; } }
+.lightbox-img-wrap {
+  max-width: 600px; max-height: 85vh;
+  position: relative;
+}
+.lightbox-img-wrap img {
+  width: 100%; height: 100%; object-fit: contain;
+  max-height: 85vh;
+}
+.lightbox-close {
+  position: absolute; top: 28px; right: 36px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--ice); background: none; border: 1px solid rgba(244,242,238,0.25);
+  padding: 10px 20px; cursor: none;
+  transition: border-color 0.3s, color 0.3s;
+}
+.lightbox-close:hover { border-color: var(--gold); color: var(--gold); }
+.lightbox-caption {
+  position: absolute; bottom: -40px; left: 0;
+  font-family: 'Inter', sans-serif; font-size: 13px; color: var(--grey-hi);
+}
+
+
 #depoimentos {
   background: var(--ink);
   padding: 120px 64px;
@@ -994,6 +1137,92 @@ canvas#particles {
   color: rgba(244,242,238,0.4); position: relative; z-index: 2;
 }
 
+/* ══ SECTION: LOCALIZAÇÃO ══ */
+#localizacao {
+  background: var(--ice);
+  padding: 120px 64px;
+}
+.loc-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+}
+.loc-info {}
+.loc-rating {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 28px;
+}
+.loc-rating-stars { color: var(--gold-lo); font-size: 16px; letter-spacing: 2px; }
+.loc-rating-text {
+  font-family: 'Inter', sans-serif; font-size: 13px; color: #555;
+}
+.loc-rating-text strong { color: var(--ink); font-weight: 600; }
+.loc-address-card {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 24px 0;
+  border-top: 1px solid rgba(12,12,12,0.08);
+  border-bottom: 1px solid rgba(12,12,12,0.08);
+  margin: 32px 0;
+}
+.loc-icon { font-size: 22px; margin-top: 2px; flex-shrink: 0; }
+.loc-addr-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 4px;
+}
+.loc-addr-sub {
+  font-family: 'Inter', sans-serif; font-size: 13px; color: #666; line-height: 1.6;
+}
+.loc-hours {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 8px 24px;
+  margin-bottom: 36px;
+}
+.loc-hours-day {
+  font-family: 'Inter', sans-serif; font-size: 13px; color: #555;
+}
+.loc-hours-day.today { color: var(--ink); font-weight: 600; }
+.loc-hours-time {
+  font-family: 'Inter', sans-serif; font-size: 13px; color: #555; text-align: right;
+}
+.loc-hours-time.today { color: var(--gold-lo); font-weight: 600; }
+.loc-review {
+  padding: 20px 24px;
+  background: rgba(200,168,75,0.06);
+  border-left: 2px solid var(--gold-lo);
+  margin-bottom: 16px;
+}
+.loc-review p {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px; font-style: italic; color: #333; line-height: 1.6;
+}
+.loc-map-wrap {
+  position: relative; height: 480px;
+  overflow: hidden;
+  border: 1px solid rgba(12,12,12,0.1);
+}
+.loc-map-wrap iframe { width: 100%; height: 100%; border: 0; filter: grayscale(8%) contrast(1.05); }
+.loc-map-badge {
+  position: absolute; top: 20px; left: 20px;
+  background: var(--ink);
+  padding: 14px 22px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.loc-map-badge-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 3px; color: var(--gold);
+}
+.loc-map-badge-sub {
+  font-family: 'Montserrat', sans-serif; font-size: 9px; letter-spacing: 2px; color: var(--grey-hi); text-transform: uppercase;
+}
+.loc-directions-btn {
+  position: absolute; bottom: 20px; right: 20px;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  background: var(--gold); color: var(--ink);
+  padding: 12px 20px; text-decoration: none;
+  transition: background 0.3s;
+}
+.loc-directions-btn:hover { background: var(--gold-hi); }
+
 /* ══ SECTION 10: CTA FINAL ══ */
 #cta-final {
   background: var(--ink);
@@ -1093,7 +1322,13 @@ footer {
   #hero { padding: 0 24px; }
   .hero-stats { display: none; }
   .identidade-grid, .kj-inner, .entrega-grid { grid-template-columns: 1fr; gap: 48px; }
-  #identidade, #kingjoe, #entrega, #depoimentos, #quiz, #looks, #materiais, #perfis, #cta-final { padding: 80px 24px; }
+  #identidade, #kingjoe, #entrega, #depoimentos, #quiz, #looks, #materiais, #perfis, #cta-final, #localizacao, #galeria { padding: 80px 24px; }
+  .loc-grid { grid-template-columns: 1fr; gap: 48px; }
+  .loc-map-wrap { height: 360px; }
+  .galeria-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
+  .gal-item:nth-child(1) { grid-column: span 2; grid-row: span 1; }
+  .gal-item:nth-child(4) { grid-row: span 1; }
+  .gal-item:nth-child(7) { grid-column: span 1; }
   #looks { padding: 80px 0 80px 24px; }
   #perfis { padding: 80px 0; }
   .perfis-head { padding: 0 24px 40px; flex-direction: column; align-items: flex-start; gap: 12px; }
@@ -1140,6 +1375,8 @@ footer {
     <li><a href="#materiais">Materiais</a></li>
     <li><a href="#quiz">Seu Estilo</a></li>
     <li><a href="#looks">Looks</a></li>
+    <li><a href="#galeria">Provador</a></li>
+    <li><a href="#localizacao">Loja</a></li>
   </ul>
   <a href="https://wa.me/5543996956093" class="nav-wpp" target="_blank">
     <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
@@ -1149,6 +1386,11 @@ footer {
 
 <!-- ══════ HERO ══════ -->
 <section id="hero">
+  <div class="hero-photo-layer">
+    <div class="hero-ph1"></div>
+    <div class="hero-ph2"></div>
+    <div class="hero-ph3"></div>
+  </div>
   <canvas id="particles"></canvas>
   <div class="hero-grid-lines"></div>
   <div class="hero-vignette"></div>
@@ -1157,6 +1399,10 @@ footer {
     <div class="hero-tag">
       <span class="hero-tag-dot"></span>
       <span class="hero-tag-text">B1 Homem · Arapongas, PR · Moda Masculina Premium</span>
+      <span style="display:inline-flex; align-items:center; gap:5px; margin-left:6px; padding-left:14px; border-left:1px solid rgba(244,242,238,0.2);">
+        <span style="color:var(--gold); font-size:11px; letter-spacing:1px;">★★★★★</span>
+        <span style="font-family:'Montserrat',sans-serif; font-size:10px; color:rgba(244,242,238,0.5); letter-spacing:1px;">4.6 Google</span>
+      </span>
     </div>
     <h1 class="hero-headline">
       <span>VISTA</span>
@@ -1237,17 +1483,17 @@ footer {
     </div>
     <div class="identidade-visual reveal-right">
       <div class="id-card a">
-        <div class="id-card-bg"></div>
+        <div class="id-card-bg" style="background-image:url('img/img8.jpg');"></div>
         <span class="id-card-label">Advogado · Audiência</span>
         <p class="id-card-text">Presença que precede o argumento.</p>
       </div>
       <div class="id-card b">
-        <div class="id-card-bg"></div>
+        <div class="id-card-bg" style="background-image:url('img/img4.jpg'); background-position:center 10%;"></div>
         <span class="id-card-label">Empresário</span>
         <p class="id-card-text">Lidera antes de abrir a boca.</p>
       </div>
       <div class="id-card c">
-        <div class="id-card-bg"></div>
+        <div class="id-card-bg" style="background-image:url('img/img10.jpg'); background-position:center 25%;"></div>
         <span class="id-card-label">Corretor</span>
         <p class="id-card-text">Confiança que fecha negócios.</p>
       </div>
@@ -1267,11 +1513,17 @@ footer {
       <span class="eyebrow">Para Cada Profissional</span>
       <h2 class="display-title">Feito para quem precisa<br><em>transmitir confiança.</em></h2>
     </div>
-    <span class="perfis-hint reveal delay-2">arraste para ver</span>
+    <div style="display:flex; align-items:center; gap:24px;">
+      <span class="perfis-hint reveal delay-2">arraste para ver</span>
+      <div class="carousel-arrows reveal delay-2">
+        <button class="carousel-arrow" onclick="scrollTrack('perfisTrack',-1)" aria-label="Anterior">←</button>
+        <button class="carousel-arrow" onclick="scrollTrack('perfisTrack',1)" aria-label="Próximo">→</button>
+      </div>
+    </div>
   </div>
   <div class="perfis-scroll-track" id="perfisTrack">
-    <div class="perfil">
-      <div class="perfil-bg p-bg1"></div>
+    <div class="perfil" data-tilt>
+      <div class="perfil-bg" style="background-image:url('img/img8.jpg'); background-position:center 8%;"></div>
       <div class="perfil-texture"></div>
       <div class="perfil-overlay"></div>
       <div class="perfil-icon-wrap">⚖️</div>
@@ -1283,8 +1535,8 @@ footer {
         </div>
       </div>
     </div>
-    <div class="perfil">
-      <div class="perfil-bg p-bg2"></div>
+    <div class="perfil" data-tilt>
+      <div class="perfil-bg" style="background-image:url('img/img6.jpg'); background-position:center 10%;"></div>
       <div class="perfil-texture"></div>
       <div class="perfil-overlay"></div>
       <div class="perfil-icon-wrap">🏛️</div>
@@ -1296,8 +1548,8 @@ footer {
         </div>
       </div>
     </div>
-    <div class="perfil">
-      <div class="perfil-bg p-bg3"></div>
+    <div class="perfil" data-tilt>
+      <div class="perfil-bg" style="background-image:url('img/img2.jpg'); background-position:center 5%;"></div>
       <div class="perfil-texture"></div>
       <div class="perfil-overlay"></div>
       <div class="perfil-icon-wrap">🏦</div>
@@ -1309,8 +1561,8 @@ footer {
         </div>
       </div>
     </div>
-    <div class="perfil">
-      <div class="perfil-bg p-bg4"></div>
+    <div class="perfil" data-tilt>
+      <div class="perfil-bg" style="background-image:url('img/img10.jpg'); background-position:center 15%;"></div>
       <div class="perfil-texture"></div>
       <div class="perfil-overlay"></div>
       <div class="perfil-icon-wrap">🎯</div>
@@ -1322,8 +1574,8 @@ footer {
         </div>
       </div>
     </div>
-    <div class="perfil">
-      <div class="perfil-bg p-bg5"></div>
+    <div class="perfil" data-tilt>
+      <div class="perfil-bg" style="background-image:url('img/img4.jpg'); background-position:center 8%;"></div>
       <div class="perfil-texture"></div>
       <div class="perfil-overlay"></div>
       <div class="perfil-icon-wrap">💼</div>
@@ -1335,8 +1587,8 @@ footer {
         </div>
       </div>
     </div>
-    <div class="perfil">
-      <div class="perfil-bg" style="background:linear-gradient(145deg,#1a1a2e,#2a2a3e,#141428);"></div>
+    <div class="perfil" data-tilt>
+      <div class="perfil-bg" style="background-image:url('img/img12.jpg'); background-position:center 5%;"></div>
       <div class="perfil-texture"></div>
       <div class="perfil-overlay"></div>
       <div class="perfil-icon-wrap">✨</div>
@@ -1392,9 +1644,10 @@ footer {
     </div>
     <div class="kj-visual reveal-right">
       <div class="kj-main-card">
-        <div class="kj-center-icon">👑</div>
-        <div class="kj-center-text">Elegância que não grita</div>
-        <div class="kj-logo-display">KJ</div>
+        <div class="kj-main-photo"></div>
+        <div class="kj-tag-floating">
+          <div class="kj-logo-display">KING JOE</div>
+        </div>
       </div>
       <div class="kj-stat-cards">
         <div class="kj-stat">
@@ -1579,90 +1832,160 @@ footer {
       <span class="eyebrow">Curadoria Completa</span>
       <h2 class="display-title">Looks prontos para<br><em>cada momento.</em></h2>
     </div>
-    <span class="perfis-hint reveal delay-2">arraste</span>
+    <div style="display:flex; align-items:center; gap:24px; padding-right: 64px;">
+      <span class="perfis-hint reveal delay-2">arraste</span>
+      <div class="carousel-arrows reveal delay-2">
+        <button class="carousel-arrow" onclick="scrollTrack('looksTrack',-1)" aria-label="Anterior">←</button>
+        <button class="carousel-arrow" onclick="scrollTrack('looksTrack',1)" aria-label="Próximo">→</button>
+      </div>
+    </div>
   </div>
   <div class="looks-track" id="looksTrack">
-    <div class="look-card">
+    <div class="look-card" data-look="0">
       <div class="look-visual">
-        <div class="look-bg lbg1"></div>
+        <div class="look-bg" style="background-image:url('img/img8.jpg'); background-position:center 5%;"></div>
         <div class="look-grad"></div>
         <span class="look-tag">Corporativo</span>
         <span class="look-number">01</span>
       </div>
       <h3 class="look-name">Reunião Importante</h3>
-      <p class="look-pieces">Polo King Joe navy · Alfaiataria slim · Cinto italiano · Oxford</p>
+      <p class="look-pieces">Camisa cinza · Bomber preta · Calça alfaiataria</p>
     </div>
-    <div class="look-card">
+    <div class="look-card" data-look="1">
       <div class="look-visual">
-        <div class="look-bg lbg2"></div>
+        <div class="look-bg" style="background-image:url('img/img4.jpg'); background-position:center 8%;"></div>
         <div class="look-grad"></div>
         <span class="look-tag">Premium</span>
         <span class="look-number">02</span>
       </div>
       <h3 class="look-name">Atendimento Premium</h3>
-      <p class="look-pieces">Camisa Pima branca · Calça grafite · Acessório dourado</p>
+      <p class="look-pieces">Camisa navy · Calça bege · Loafer marrom</p>
     </div>
-    <div class="look-card">
+    <div class="look-card" data-look="2">
       <div class="look-visual">
-        <div class="look-bg lbg3"></div>
+        <div class="look-bg" style="background-image:url('img/img9.jpg'); background-position:center 10%;"></div>
         <div class="look-grad"></div>
         <span class="look-tag">Social</span>
         <span class="look-number">03</span>
       </div>
       <h3 class="look-name">Jantar Executivo</h3>
-      <p class="look-pieces">Polo preta King Joe · Chino escuro · Derby couro</p>
+      <p class="look-pieces">Jaqueta tricot marrom · Camisa areia · Calça escura</p>
     </div>
-    <div class="look-card">
+    <div class="look-card" data-look="3">
       <div class="look-visual">
-        <div class="look-bg lbg4"></div>
+        <div class="look-bg" style="background-image:url('img/img1.jpg'); background-position:center 8%;"></div>
         <div class="look-grad"></div>
         <span class="look-tag">Versátil</span>
         <span class="look-number">04</span>
       </div>
       <h3 class="look-name">Casual Elegante</h3>
-      <p class="look-pieces">Camiseta Yacht · Calça Democrata bege · Tênis premium</p>
+      <p class="look-pieces">Moletom King&Joe navy · Bomber bege · Calça preta</p>
     </div>
-    <div class="look-card">
+    <div class="look-card" data-look="4">
       <div class="look-visual">
-        <div class="look-bg lbg5"></div>
+        <div class="look-bg" style="background-image:url('img/img10.jpg'); background-position:center 18%;"></div>
         <div class="look-grad"></div>
         <span class="look-tag">Lifestyle</span>
         <span class="look-number">05</span>
       </div>
       <h3 class="look-name">Final de Semana</h3>
-      <p class="look-pieces">Bermuda Democrata · Polo clara · Mule couro</p>
+      <p class="look-pieces">Colete acolchoado · Camisa branca · Loafer couro</p>
     </div>
-    <div class="look-card">
+    <div class="look-card" data-look="5">
       <div class="look-visual">
-        <div class="look-bg" style="background: linear-gradient(145deg, #1a1428, #2a2040);"></div>
+        <div class="look-bg" style="background-image:url('img/img2.jpg'); background-position:center 5%;"></div>
         <div class="look-grad"></div>
         <span class="look-tag">Exclusivo</span>
         <span class="look-number">06</span>
       </div>
-      <h3 class="look-name">Evento de Gala</h3>
-      <p class="look-pieces">Blazer slim · Camiseta Pima preta · Calça premium</p>
+      <h3 class="look-name">Look de Saída</h3>
+      <p class="look-pieces">Jaqueta suede bege · Camisa navy · Calça clara</p>
+    </div>
+    <div class="look-card" data-look="6">
+      <div class="look-visual">
+        <div class="look-bg" style="background-image:url('img/img12.jpg'); background-position:center 5%;"></div>
+        <div class="look-grad"></div>
+        <span class="look-tag">Streetwear</span>
+        <span class="look-number">07</span>
+      </div>
+      <h3 class="look-name">Conforto Premium</h3>
+      <p class="look-pieces">Bomber bege · Camiseta branca · Calça preta</p>
     </div>
   </div>
 </section>
 
+<!-- ══════ GALERIA PROVADOR ══════ -->
+<section id="galeria">
+  <div class="galeria-head reveal">
+    <span class="eyebrow eyebrow-dark">Bastidores B1</span>
+    <h2 class="display-title display-title-dark">Provador de quem<br>já <em style="color: var(--gold-lo);">decidiu vestir bem.</em></h2>
+  </div>
+  <div class="galeria-grid">
+    <div class="gal-item" onclick="openLightbox('img/img7.jpg','Dois estilos, a mesma atitude')">
+      <div class="gal-img" style="background-image:url('img/img7.jpg'); background-position:center 8%;"></div>
+      <div class="gal-shade"></div>
+      <span class="gal-label">Looks Combinados</span>
+    </div>
+    <div class="gal-item" onclick="openLightbox('img/img11.jpg','Provador B1 Homem')">
+      <div class="gal-img" style="background-image:url('img/img11.jpg'); background-position:center 15%;"></div>
+      <div class="gal-shade"></div>
+      <span class="gal-label">Bastidores</span>
+    </div>
+    <div class="gal-item" onclick="openLightbox('img/img9.jpg','Preto e marrom, combinação certeira')">
+      <div class="gal-img" style="background-image:url('img/img9.jpg'); background-position:center 5%;"></div>
+      <div class="gal-shade"></div>
+      <span class="gal-label">Tons Terrosos</span>
+    </div>
+    <div class="gal-item" onclick="openLightbox('img/img3.jpg','Bomber preta com camisa cinza')">
+      <div class="gal-img" style="background-image:url('img/img3.jpg'); background-position:center 5%;"></div>
+      <div class="gal-shade"></div>
+      <span class="gal-label">Detalhe Bomber</span>
+    </div>
+    <div class="gal-item" onclick="openLightbox('img/img6.jpg','Camisa navy, look social')">
+      <div class="gal-img" style="background-image:url('img/img6.jpg'); background-position:center 5%;"></div>
+      <div class="gal-shade"></div>
+      <span class="gal-label">Camisaria</span>
+    </div>
+    <div class="gal-item" onclick="openLightbox('img/img12.jpg','Bomber bege, conforto premium')">
+      <div class="gal-img" style="background-image:url('img/img12.jpg'); background-position:center 5%;"></div>
+      <div class="gal-shade"></div>
+      <span class="gal-label">Streetwear</span>
+    </div>
+    <div class="gal-item" onclick="openLightbox('img/img1.jpg','King e Joe, lado a lado')">
+      <div class="gal-img" style="background-image:url('img/img1.jpg'); background-position:center 8%;"></div>
+      <div class="gal-shade"></div>
+      <span class="gal-label">King Joe · Dupla</span>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="if(event.target===this) closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">Fechar ✕</button>
+  <div class="lightbox-img-wrap">
+    <img id="lightboxImg" src="" alt="">
+    <p class="lightbox-caption" id="lightboxCaption"></p>
+  </div>
+</div>
+
 <!-- ══════ DEPOIMENTOS ══════ -->
 <section id="depoimentos">
   <div class="dep-header reveal">
-    <span class="eyebrow">Clientes Reais · Arapongas e Região</span>
-    <h2 class="display-title">Eles<br><em>transformaram</em><br>sua imagem.</h2>
+    <span class="eyebrow">Clientes Reais · Avaliações Google</span>
+    <h2 class="display-title">O que dizem<br>sobre a <em>B1 Homem.</em></h2>
   </div>
   <div class="dep-grid">
     <div class="dep-card reveal delay-1">
       <div class="dep-big-quote">"</div>
       <div class="dep-stars">★★★★★</div>
       <p class="dep-text">
-        Antes eu passava horas sem saber o que vestir para reuniões. Hoje abro o armário e já sei. Minha credibilidade com clientes mudou completamente.
+        Minha loja preferida. Bons preços e uma variedade enorme de roupas. Qualidade excelente.
       </p>
       <div class="dep-person">
-        <div class="dep-avatar">R</div>
+        <div class="dep-avatar">G</div>
         <div>
-          <p class="dep-name">Ricardo Almeida</p>
-          <p class="dep-role">Advogado · Arapongas PR</p>
+          <p class="dep-name">Cliente Google</p>
+          <p class="dep-role">Avaliação verificada · ★ Google</p>
         </div>
       </div>
     </div>
@@ -1670,13 +1993,13 @@ footer {
       <div class="dep-big-quote">"</div>
       <div class="dep-stars">★★★★★</div>
       <p class="dep-text">
-        Fechei três contratos num mês depois de atualizar meu guarda-roupa na B1. Quando você se veste bem, negocia melhor. Simples assim.
+        Roupas sempre muito boas e o atendimento maravilhoso. Essa é uma loja que eu recomendo e vou sempre.
       </p>
       <div class="dep-person">
-        <div class="dep-avatar">M</div>
+        <div class="dep-avatar">G</div>
         <div>
-          <p class="dep-name">Marcos Tavares</p>
-          <p class="dep-role">Corretor de Imóveis · CRECI-PR</p>
+          <p class="dep-name">Cliente Google</p>
+          <p class="dep-role">Avaliação verificada · ★ Google</p>
         </div>
       </div>
     </div>
@@ -1684,17 +2007,20 @@ footer {
       <div class="dep-big-quote">"</div>
       <div class="dep-stars">★★★★★</div>
       <p class="dep-text">
-        A qualidade das peças da King Joe surpreende. Uso a Yacht nas palestras e o conforto é incrível. Foco no que importa, não no desconforto.
+        Bom atendimento, roupas inusitadas e preços médios. Recomendo a todos que buscam algo diferente.
       </p>
       <div class="dep-person">
-        <div class="dep-avatar">F</div>
+        <div class="dep-avatar">G</div>
         <div>
-          <p class="dep-name">Felipe Monteiro</p>
-          <p class="dep-role">Coach Executivo · Londrina PR</p>
+          <p class="dep-name">Cliente Google</p>
+          <p class="dep-role">Avaliação verificada · ★ Google</p>
         </div>
       </div>
     </div>
   </div>
+  <p style="text-align:center; margin-top: 40px; font-family:'Montserrat',sans-serif; font-size: 11px; letter-spacing: 2px; color: var(--grey);">
+    ★★★★★ 4.6 de média · +30 avaliações reais no Google
+  </p>
 </section>
 
 <!-- ══════ ENTREGA ══════ -->
@@ -1739,6 +2065,53 @@ footer {
         Chamar no WhatsApp
       </a>
       <p class="wpp-number">(43) 99695-6093</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ LOCALIZAÇÃO ══════ -->
+<section id="localizacao">
+  <div class="loc-grid">
+    <div class="reveal-left">
+      <span class="eyebrow eyebrow-dark">Visite a Loja</span>
+      <h2 class="display-title display-title-dark">Estamos no<br><em style="color: var(--gold-lo);">centro de Arapongas.</em></h2>
+      <div class="loc-rating">
+        <span class="loc-rating-stars">★★★★★</span>
+        <span class="loc-rating-text"><strong>4.6</strong> · mais de 30 avaliações no Google</span>
+      </div>
+      <div class="loc-address-card">
+        <span class="loc-icon">📍</span>
+        <div>
+          <p class="loc-addr-title">Av. Arapongas, 379 — Centro</p>
+          <p class="loc-addr-sub">Arapongas, PR · CEP 86700-050</p>
+        </div>
+      </div>
+      <div class="loc-hours">
+        <span class="loc-hours-day">Segunda a Sexta</span>
+        <span class="loc-hours-time">8h30 — 18h</span>
+        <span class="loc-hours-day today">Sábado</span>
+        <span class="loc-hours-time today">9h — 18h</span>
+        <span class="loc-hours-day">Domingo</span>
+        <span class="loc-hours-time">Fechado</span>
+      </div>
+      <div class="loc-review">
+        <p>"Roupas sempre muito boas e o atendimento maravilhoso, essa é uma loja que eu recomendo e vou sempre."</p>
+      </div>
+      <a href="https://wa.me/5543996956093" class="btn-gold" target="_blank" style="margin-top: 8px;"><span>Falar Antes de Ir →</span></a>
+    </div>
+    <div class="loc-map-wrap reveal-right">
+      <iframe
+        src="https://www.google.com/maps?q=Av.+Arapongas,+379+-+Centro,+Arapongas+-+PR,+86700-050&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+      <div class="loc-map-badge">
+        <span class="loc-map-badge-title">B1 <span style="color:var(--ice);">HOMEM</span></span>
+        <span class="loc-map-badge-sub">Centro · Arapongas PR</span>
+      </div>
+      <a href="https://www.google.com/maps/dir/?api=1&destination=Av.+Arapongas,+379+-+Centro,+Arapongas+-+PR,+86700-050" target="_blank" class="loc-directions-btn">
+        Como Chegar →
+      </a>
     </div>
   </div>
 </section>
@@ -1897,6 +2270,48 @@ function dragScroll(el) {
 }
 dragScroll(document.getElementById('perfisTrack'));
 dragScroll(document.getElementById('looksTrack'));
+
+/* ── ARROW NAV SCROLL ── */
+function scrollTrack(id, dir) {
+  const el = document.getElementById(id);
+  const card = el.querySelector(id === 'perfisTrack' ? '.perfil' : '.look-card');
+  const cardWidth = card ? card.offsetWidth + 16 : 320;
+  el.scrollBy({ left: dir * cardWidth * 1.5, behavior: 'smooth' });
+}
+
+/* ── LIGHTBOX ── */
+function openLightbox(src, caption) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightboxCaption').textContent = caption || '';
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+/* ── LOOK CARDS OPEN LIGHTBOX ── */
+document.querySelectorAll('.look-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const bg = card.querySelector('.look-bg');
+    const url = bg.style.backgroundImage.slice(5, -2);
+    const name = card.querySelector('.look-name').textContent;
+    openLightbox(url, name);
+  });
+});
+
+/* ── 3D TILT ON PERFIL CARDS ── */
+document.querySelectorAll('[data-tilt]').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `perspective(800px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+  });
+  card.addEventListener('mouseleave', () => { card.style.transform = 'perspective(800px) rotateY(0) rotateX(0)'; });
+});
 
 /* ── MATERIAL TABS ── */
 function switchMat(id, tabEl) {
