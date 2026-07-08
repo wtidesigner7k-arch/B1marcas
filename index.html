@@ -3,309 +3,360 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Disparo • Painel de Campanhas WhatsApp</title>
-
+<title>Radar — Prospecção automática para agências de marketing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#10142a;
+    --ink-2:#151a35;
+    --surface:#1a2140;
+    --surface-2:#212a4d;
+    --line: rgba(241,243,246,0.09);
+    --line-strong: rgba(241,243,246,0.16);
+    --text:#f1f3f8;
+    --muted:#8d94b3;
+    --muted-2:#6871934d;
+    --teal:#5eead4;
+    --teal-dim: rgba(94,234,212,0.14);
+    --amber:#f5a623;
+    --amber-dim: rgba(245,166,35,0.14);
+    --coral:#ff7a7a;
+    --coral-dim: rgba(255,122,122,0.14);
+    --radius: 14px;
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  img,svg{display:block; max-width:100%;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
+  @media (max-width:640px){ .wrap{padding:0 18px;} }
 
-<!-- Bibliotecas para importação de CSV/Excel (usadas 100% no navegador, sem servidor) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  ::selection{ background: var(--teal); color:#0a0e1e; }
+
+  /* ---------- utility ---------- */
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    display:flex; align-items:center; gap:8px;
+  }
+  .eyebrow::before{
+    content:""; width:7px; height:7px; border-radius:50%;
+    background: var(--teal); box-shadow: 0 0 0 3px var(--teal-dim);
+  }
+  h1,h2,h3,h4{ font-family: var(--display); font-weight:600; letter-spacing:-0.01em; }
+  .btn{
+    font-family: var(--body); font-weight:600; font-size:14.5px;
+    padding: 13px 24px; border-radius: 999px; border:1px solid transparent;
+    cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+    text-decoration:none; transition: transform .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn:active{ transform: scale(0.97); }
+  .btn-primary{ background: var(--teal); color:#082024; }
+  .btn-primary:hover{ background:#7ff0da; }
+  .btn-ghost{ background:transparent; color:var(--text); border-color: var(--line-strong); }
+  .btn-ghost:hover{ border-color: var(--teal); color: var(--teal); }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background: rgba(16,20,42,0.82); backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  header .wrap{ display:flex; align-items:center; justify-content:space-between; height:74px; }
+  .logo{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:700; font-size:19px; }
+  .logo .dot{ width:10px; height:10px; border-radius:50%; background: var(--teal); box-shadow: 0 0 0 4px var(--teal-dim); }
+  nav ul{ list-style:none; display:flex; gap:30px; }
+  nav a{ font-size:14.5px; color:var(--muted); text-decoration:none; transition:color .15s; }
+  nav a:hover{ color: var(--text); }
+  .nav-links{ display:flex; align-items:center; gap:30px; }
+  @media (max-width: 860px){ .nav-links ul{ display:none; } }
+
+  /* ---------- hero / radar ---------- */
+  .hero{ position:relative; padding: 90px 0 60px; overflow:hidden; }
+  .hero-grid{ display:grid; grid-template-columns: 1.05fr 0.95fr; gap:50px; align-items:center; }
+  @media (max-width:940px){ .hero-grid{ grid-template-columns:1fr; } }
+  .hero h1{ font-size: clamp(36px, 5vw, 58px); line-height:1.05; margin: 18px 0 22px; }
+  .hero h1 em{ font-style:normal; color: var(--teal); }
+  .hero p.lead{ font-size:17px; color: var(--muted); max-width:520px; margin-bottom:32px; }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom: 34px;}
+  .hero-stats{ display:flex; gap:34px; flex-wrap:wrap; }
+  .hero-stats div{ font-family:var(--mono); }
+  .hero-stats .num{ font-size:22px; color:var(--text); font-weight:600; }
+  .hero-stats .lbl{ font-size:11.5px; color:var(--muted); letter-spacing:.06em; text-transform:uppercase; }
+
+  .radar-box{ position:relative; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; }
+  .radar-ring{
+    position:absolute; border-radius:50%; border:1px solid var(--line-strong);
+  }
+  .r1{width:100%; height:100%;}
+  .r2{width:74%; height:74%;}
+  .r3{width:48%; height:48%;}
+  .r4{width:22%; height:22%; border-color: var(--teal); opacity:.5;}
+  .radar-sweep{
+    position:absolute; width:100%; height:100%; border-radius:50%;
+    background: conic-gradient(from 0deg, rgba(94,234,212,0.5), rgba(94,234,212,0) 34%);
+    animation: spin 4.5s linear infinite;
+    mask-image: radial-gradient(circle, black 60%, transparent 100%);
+  }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  .blip{ position:absolute; width:9px; height:9px; border-radius:50%; background: var(--teal); box-shadow:0 0 0 5px var(--teal-dim); animation: blip 2.6s ease-in-out infinite; }
+  .blip.b2{ background: var(--amber); box-shadow:0 0 0 5px var(--amber-dim); animation-delay: .6s; }
+  .blip.b3{ animation-delay: 1.3s; }
+  .blip.b4{ background: var(--coral); box-shadow:0 0 0 5px var(--coral-dim); animation-delay: 1.9s; }
+  @keyframes blip{ 0%,100%{ opacity:.35; transform:scale(.85);} 50%{ opacity:1; transform:scale(1.15);} }
+  .radar-center{ position:relative; z-index:2; font-family:var(--mono); text-align:center; }
+  .radar-center .big{ font-size:15px; color:var(--teal); }
+  .radar-center .small{ font-size:11px; color:var(--muted); margin-top:4px;}
+  @media (prefers-reduced-motion: reduce){ .radar-sweep{animation:none;} .blip{animation:none;} }
+
+  /* ---------- sections ---------- */
+  section{ padding: 88px 0; border-top:1px solid var(--line); }
+  .section-head{ max-width:640px; margin-bottom:48px; }
+  .section-head h2{ font-size: clamp(28px,3.4vw,38px); margin-top:14px; }
+  .section-head p{ color:var(--muted); margin-top:14px; font-size:16px; }
+
+  /* how it works */
+  .steps{ display:grid; grid-template-columns: repeat(3,1fr); gap:24px; }
+  @media (max-width:860px){ .steps{ grid-template-columns:1fr; } }
+  .step{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:28px; }
+  .step .idx{ font-family:var(--mono); color:var(--teal); font-size:13px; margin-bottom:16px; }
+  .step h3{ font-size:19px; margin-bottom:10px; }
+  .step p{ color:var(--muted); font-size:14.5px; }
+
+  /* prospect tool */
+  .tool-panel{
+    background: linear-gradient(180deg, var(--surface), var(--ink-2));
+    border:1px solid var(--line-strong); border-radius:20px; padding:36px;
+  }
+  .tool-form{ display:grid; grid-template-columns: 1fr 1fr auto; gap:14px; margin-bottom:8px; }
+  @media (max-width:760px){ .tool-form{ grid-template-columns:1fr; } }
+  .field label{ display:block; font-family:var(--mono); font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px; }
+  .field input, .field select{
+    width:100%; background: var(--ink); border:1px solid var(--line-strong); color:var(--text);
+    padding:13px 14px; border-radius:10px; font-size:14.5px; font-family:var(--body);
+  }
+  .field input:focus, .field select:focus{ outline:none; border-color:var(--teal); }
+  .tool-form .field.submit{ display:flex; align-items:flex-end; }
+  .tool-form .field.submit .btn{ width:100%; justify-content:center; height:47px; }
+
+  .advanced-toggle{ margin-top:14px; }
+  .advanced-toggle summary{ cursor:pointer; font-family:var(--mono); font-size:12.5px; color: var(--muted); list-style:none; display:flex; align-items:center; gap:6px;}
+  .advanced-toggle summary::-webkit-details-marker{ display:none; }
+  .advanced-toggle summary:before{ content:"▸"; color:var(--teal); transition: transform .15s;}
+  .advanced-toggle[open] summary:before{ transform: rotate(90deg); }
+  .advanced-box{ margin-top:16px; padding:18px; background:rgba(0,0,0,0.18); border-radius:12px; border:1px solid var(--line); font-size:13.5px; color:var(--muted); }
+  .advanced-box code{ font-family:var(--mono); background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px; color:var(--teal); font-size:12.5px; }
+  .advanced-box ol{ margin:10px 0 10px 18px; }
+  .advanced-box .key-row{ display:flex; gap:10px; margin-top:12px; }
+  .advanced-box .key-row input{ flex:1; background:var(--ink); border:1px solid var(--line-strong); border-radius:8px; padding:9px 12px; color:var(--text); font-family:var(--mono); font-size:12.5px; }
+
+  #resultsMeta{ font-family:var(--mono); font-size:12.5px; color:var(--muted); margin: 22px 0 16px; min-height:16px; }
+  #results{ display:grid; grid-template-columns: repeat(auto-fill, minmax(310px,1fr)); gap:18px; }
+  .prospect-card{
+    background: var(--surface); border:1px solid var(--line); border-radius: var(--radius); padding:22px;
+    animation: fadein .4s ease both;
+  }
+  @keyframes fadein{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+  .pc-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px;}
+  .pc-top h4{ font-size:16.5px; }
+  .pc-score{ font-family:var(--mono); font-size:12px; padding:4px 9px; border-radius:20px; white-space:nowrap;}
+  .score-low{ background: var(--coral-dim); color: var(--coral); }
+  .score-mid{ background: var(--amber-dim); color: var(--amber); }
+  .score-high{ background: var(--teal-dim); color: var(--teal); }
+  .pc-meta{ font-size:13px; color:var(--muted); margin-bottom:14px; display:flex; gap:14px; flex-wrap:wrap; font-family:var(--mono); }
+  .pc-list{ list-style:none; margin-bottom:8px; }
+  .pc-list li{ font-size:13px; padding:5px 0; display:flex; gap:8px; align-items:flex-start; }
+  .pc-list li.good::before{ content:"＋"; color:var(--teal); font-weight:700; }
+  .pc-list li.bad::before{ content:"－"; color:var(--coral); font-weight:700; }
+  .pc-reco{ margin-top:14px; padding-top:14px; border-top:1px solid var(--line); font-size:13px; }
+  .pc-reco .tag{ display:inline-block; background: var(--surface-2); color:var(--text); font-family:var(--mono); font-size:11.5px; padding:4px 9px; border-radius:6px; margin:4px 6px 0 0; }
+  .empty-state{ font-family:var(--mono); font-size:13.5px; color:var(--muted); text-align:center; padding: 50px 20px; border:1px dashed var(--line-strong); border-radius:14px; }
+
+  /* services */
+  .service-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(270px,1fr)); gap:18px; }
+  .service-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:24px; transition: border-color .15s, transform .15s; }
+  .service-card:hover{ border-color: var(--line-strong); transform: translateY(-3px); }
+  .service-card .icn{ width:38px; height:38px; border-radius:10px; background:var(--teal-dim); color:var(--teal); display:flex; align-items:center; justify-content:center; margin-bottom:16px; font-size:18px;}
+  .service-card h3{ font-size:16.5px; margin-bottom:8px; }
+  .service-card p{ font-size:13.5px; color:var(--muted); margin-bottom:14px; }
+  .service-card .price{ font-family:var(--mono); font-size:12.5px; color: var(--teal); border-top:1px solid var(--line); padding-top:12px; }
+  .badge-new{ font-family:var(--mono); font-size:10px; background:var(--amber-dim); color:var(--amber); padding:2px 7px; border-radius:5px; margin-left:8px; vertical-align:middle; text-transform:uppercase; letter-spacing:.05em;}
+
+  /* pricing table */
+  .price-table{ width:100%; border-collapse:collapse; font-size:14px; }
+  .price-table th, .price-table td{ padding:16px 14px; text-align:left; border-bottom:1px solid var(--line); }
+  .price-table th{ font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:500; }
+  .price-table td.num{ font-family:var(--mono); }
+  .price-table tr:hover td{ background: rgba(255,255,255,0.02); }
+  .price-table .suggested{ color: var(--teal); font-weight:600; }
+  .table-scroll{ overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); }
+  .table-scroll table{ min-width:720px; }
+  .price-note{ font-size:13px; color:var(--muted); margin-top:16px; max-width:700px; }
+  .price-note a{ color:var(--teal); text-decoration:underline; }
+
+  /* dashboard mockup */
+  .dash{ background: var(--surface); border:1px solid var(--line); border-radius:20px; padding:30px; }
+  .dash-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:26px; flex-wrap:wrap; gap:10px;}
+  .dash-top .eyebrow{ margin:0; }
+  .kpi-grid{ display:grid; grid-template-columns: repeat(4,1fr); gap:16px; margin-bottom:24px; }
+  @media (max-width:820px){ .kpi-grid{ grid-template-columns: repeat(2,1fr);} }
+  .kpi{ background: var(--ink-2); border:1px solid var(--line); border-radius:12px; padding:18px; }
+  .kpi .lbl{ font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+  .kpi .val{ font-size:26px; font-family:var(--display); margin:8px 0 4px; }
+  .kpi .delta{ font-family:var(--mono); font-size:12px; }
+  .delta.up{ color:var(--teal); } .delta.down{ color:var(--coral); }
+  .bars{ display:flex; align-items:flex-end; gap:8px; height:120px; margin-top:6px; }
+  .bars .bar{ flex:1; background: linear-gradient(180deg, var(--teal), rgba(94,234,212,0.25)); border-radius:5px 5px 0 0; }
+
+  /* CTA / footer */
+  .cta{ text-align:center; padding-top:90px; padding-bottom:90px; }
+  .cta h2{ font-size: clamp(28px,4vw,42px); max-width:680px; margin: 16px auto 26px; }
+  .cta-actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  footer{ border-top:1px solid var(--line); padding:36px 0; }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  footer p{ font-size:13px; color:var(--muted); }
+</style>
 </head>
 <body>
 
-<div class="app-shell">
-
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-  <!-- ============================= SIDEBAR ============================= -->
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <div class="brand-mark">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H3l2.1-4.2A8.5 8.5 0 1 1 21 11.5Z"/></svg>
-      </div>
-      <div class="brand-text">
-        <strong>Disparo</strong>
-        <span>Painel de campanhas</span>
-      </div>
+<header>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>Radar<span style="color:var(--muted); font-weight:400;">.mkt</span></div>
+    <div class="nav-links">
+      <ul>
+        <li><a href="#ferramenta">Prospecção</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#precos">Preços de mercado</a></li>
+        <li><a href="#metricas">Métricas</a></li>
+      </ul>
+      <a href="#ferramenta" class="btn btn-primary">Buscar prospects</a>
     </div>
-
-    <nav class="nav">
-      <button class="nav-item active" data-view="dashboard">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
-        Dashboard
-      </button>
-      <button class="nav-item" data-view="campaign">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-        Nova campanha
-      </button>
-      <button class="nav-item" data-view="dispatch">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 3 18 9-18 9 4.5-9L3 3Z"/></svg>
-        Disparo
-      </button>
-      <button class="nav-item" data-view="history">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/><path d="M12 7v5l3 3"/></svg>
-        Histórico
-      </button>
-    </nav>
-
-    <div class="sidebar-footer">
-      <div class="sender-status">
-        <span class="pulse-dot"></span>
-        <span id="sidebarSenderPhone">Nenhum número configurado</span>
-      </div>
-      <span>Modo simulação — pronto para integração com API oficial.</span>
-    </div>
-  </aside>
-
-  <!-- ============================== MAIN =============================== -->
-  <div class="main">
-    <header class="topbar">
-      <div class="flex gap-10" style="align-items:center;">
-        <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
-        <div>
-          <h1 id="topbarTitle">Dashboard</h1>
-          <div class="subtitle" id="topbarSubtitle">Visão geral das suas campanhas</div>
-        </div>
-      </div>
-      <div class="topbar-actions">
-        <button class="btn btn-primary" data-goto="campaign">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-          Nova campanha
-        </button>
-      </div>
-    </header>
-
-    <!-- =========================== DASHBOARD ============================ -->
-    <section class="view active" id="view-dashboard">
-      <div class="grid grid-4" id="dashboardStats"></div>
-
-      <div class="card mt-20">
-        <div class="flex-between mb-14">
-          <div>
-            <div class="card-title">Última campanha</div>
-            <div class="card-hint">Resumo rápido da campanha mais recente</div>
-          </div>
-        </div>
-        <div id="lastCampaignBox"></div>
-      </div>
-
-      <div class="card mt-20">
-        <div class="flex-between mb-14">
-          <div>
-            <div class="card-title">Campanhas recentes</div>
-            <div class="card-hint">As últimas 5 campanhas criadas</div>
-          </div>
-          <button class="btn btn-ghost btn-sm" data-goto="history">Ver histórico completo</button>
-        </div>
-        <div id="recentCampaignsTable"></div>
-      </div>
-    </section>
-
-    <!-- ========================= NOVA CAMPANHA =========================== -->
-    <section class="view" id="view-campaign">
-
-      <div class="grid grid-2" style="align-items:start;">
-        <!-- Coluna esquerda: configuração -->
-        <div class="flex" style="flex-direction:column; gap:18px;">
-
-          <div class="card">
-            <div class="card-title">Dados da campanha</div>
-            <div class="card-hint">Número remetente e identificação da campanha</div>
-            <div class="field-row">
-              <div class="field">
-                <label class="field-label" for="senderPhone">Número que enviará as mensagens</label>
-                <input type="tel" id="senderPhone" placeholder="Ex: 55 11 99999-9999">
-              </div>
-              <div class="field">
-                <label class="field-label" for="campaignName">Nome da campanha</label>
-                <input type="text" id="campaignName" placeholder="Ex: Promoção de julho">
-              </div>
-            </div>
-            <div class="field">
-              <label class="field-label" for="intervalSeconds">Intervalo entre envios</label>
-              <select id="intervalSeconds">
-                <option value="15">15 segundos (teste)</option>
-                <option value="30">30 segundos</option>
-                <option value="60" selected>1 minuto (padrão)</option>
-                <option value="120">2 minutos</option>
-                <option value="300">5 minutos</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-title">Contatos</div>
-            <div class="card-hint">Importe um arquivo CSV/Excel ou cole a lista manualmente</div>
-
-            <div class="dropzone" id="dropzone">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4M12 4 7 9M12 4l5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
-              <strong>Clique ou arraste um arquivo aqui</strong>
-              <span>Suporta .csv, .xlsx e .xls — colunas "Nome" e "Telefone"</span>
-              <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" class="hidden">
-            </div>
-
-            <div class="or-divider">ou cole a lista manualmente</div>
-
-            <div class="field">
-              <textarea id="pasteList" placeholder="João;5599999999999&#10;Maria;5588888888888&#10;Pedro;5577777777777"></textarea>
-              <div class="text-sm text-muted mt-8">Formato: <span class="mono">Nome;Telefone</span> — um contato por linha</div>
-            </div>
-            <button class="btn btn-secondary btn-block" id="btnParsePaste">Adicionar lista colada</button>
-
-            <div class="mt-20">
-              <div class="flex-between mb-8">
-                <span class="text-sm" style="font-weight:600;">Contatos importados</span>
-                <span class="text-sm text-muted" id="contactsCount">0 contatos</span>
-              </div>
-              <div class="table-wrap" style="max-height:260px; overflow-y:auto;">
-                <table>
-                  <thead><tr><th>Nome</th><th>Telefone</th><th></th></tr></thead>
-                  <tbody id="contactsTableBody"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Coluna direita: mensagem -->
-        <div class="card">
-          <div class="card-title">Mensagem</div>
-          <div class="card-hint">Escreva o conteúdo e use variáveis para personalizar</div>
-
-          <div class="tabs" id="messageVersionTabs"></div>
-
-          <div class="field">
-            <label class="field-label">Variáveis disponíveis (clique para inserir)</label>
-            <span class="var-pill" data-var="{nome}">{nome}</span>
-            <span class="var-pill" data-var="{telefone}">{telefone}</span>
-          </div>
-
-          <div class="field">
-            <textarea id="messageEditor" placeholder="Olá, {nome}! Tudo bem?" style="min-height:160px;"></textarea>
-          </div>
-
-          <div class="flex gap-8 mb-14">
-            <button class="btn btn-secondary btn-sm" id="btnAddVersion">+ Nova variação</button>
-            <button class="btn btn-ghost btn-sm" id="btnRemoveVersion">Remover esta variação</button>
-          </div>
-
-          <div class="card" style="background:var(--surface-alt); box-shadow:none;">
-            <div class="card-title" style="font-size:13px;">Pré-visualização</div>
-            <p class="text-sm mt-8" id="messagePreview" style="white-space:pre-wrap;">Olá, João! Tudo bem?</p>
-          </div>
-
-          <button class="btn btn-primary btn-block mt-20" id="btnStartCampaign">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 3 18 9-18 9 4.5-9L3 3Z"/></svg>
-            Iniciar disparo
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================= DISPARO ============================= -->
-    <section class="view" id="view-dispatch">
-
-      <div id="dispatchEmpty" class="card empty-state">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m3 3 18 9-18 9 4.5-9L3 3Z"/></svg>
-        <strong>Nenhuma campanha em andamento</strong>
-        <span>Crie e inicie uma campanha para acompanhar o disparo em tempo real.</span>
-        <button class="btn btn-primary mt-14" data-goto="campaign">Criar campanha</button>
-      </div>
-
-      <div id="dispatchContent" class="hidden">
-        <div class="card dispatch-hero mb-14">
-          <div class="ring-wrap">
-            <svg viewBox="0 0 200 200">
-              <circle class="ring-bg" cx="100" cy="100" r="88"></circle>
-              <circle class="ring-progress" id="ringProgress" cx="100" cy="100" r="88" stroke-dasharray="553" stroke-dashoffset="553"></circle>
-            </svg>
-            <div class="ring-center">
-              <span class="ring-time" id="ringTime">--:--</span>
-              <span class="ring-label">Próximo envio</span>
-            </div>
-          </div>
-
-          <div style="width:100%;">
-            <div class="flex-between mb-8">
-              <div>
-                <h2 id="dispatchCampaignName" style="font-size:18px;">—</h2>
-                <span class="text-sm text-muted" id="dispatchCampaignMeta">—</span>
-              </div>
-              <span class="badge badge-sending" id="dispatchStatusBadge"><span class="badge-dot"></span>Em andamento</span>
-            </div>
-
-            <div class="dispatch-progress-bar"><div class="dispatch-progress-fill" id="progressFill" style="width:0%;"></div></div>
-            <div class="flex-between text-sm text-muted">
-              <span id="progressSentLabel">0 enviadas</span>
-              <span id="progressRemainingLabel">0 restantes</span>
-            </div>
-
-            <div class="current-contact" id="currentContactBox">
-              <div class="avatar-circle">—</div>
-              <div>
-                <div style="font-weight:600;" id="currentContactName">Aguardando início…</div>
-                <div class="text-sm text-muted mono" id="currentContactPhone">—</div>
-              </div>
-            </div>
-
-            <div class="flex gap-8 mt-14">
-              <button class="btn btn-secondary" id="btnPause">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-                Pausar
-              </button>
-              <button class="btn btn-primary hidden" id="btnResume">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l14 8-14 8V4Z"/></svg>
-                Continuar
-              </button>
-              <button class="btn btn-danger" id="btnCancel">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title mb-14">Fila e status de envio</div>
-          <div class="log-list" id="dispatchLogList"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================ HISTÓRICO ============================ -->
-    <section class="view" id="view-history">
-      <div class="card">
-        <div class="flex-between mb-14">
-          <div>
-            <div class="card-title">Campanhas realizadas</div>
-            <div class="card-hint">Todas as campanhas já iniciadas neste dispositivo</div>
-          </div>
-        </div>
-        <div id="historyTableWrap"></div>
-      </div>
-    </section>
-
   </div>
-</div>
+</header>
 
-<div id="toast-root"></div>
-<div id="modal-root"></div>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Prospecção automática · Diagnóstico instantâneo</span>
+      <h1>Encontre e <em>diagnostique</em> clientes de marketing antes de eles saberem que precisam de você.</h1>
+      <p class="lead">Digite uma cidade e um nicho. O Radar varre os negócios da região, aponta o que cada um tem de bom e de ruim na presença digital, e já sugere quais dos seus serviços vender — com o preço certo pra cobrar.</p>
+      <div class="hero-actions">
+        <a href="#ferramenta" class="btn btn-primary">Rodar uma busca agora ↓</a>
+        <a href="#servicos" class="btn btn-ghost">Ver serviços e preços</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="num">10</div><div class="lbl">serviços mapeados</div></div>
+        <div><div class="num">2026</div><div class="lbl">preços atualizados</div></div>
+        <div><div class="num">100%</div><div class="lbl">diagnóstico automático</div></div>
+      </div>
+    </div>
+    <div class="radar-box">
+      <div class="radar-ring r1"></div>
+      <div class="radar-ring r2"></div>
+      <div class="radar-ring r3"></div>
+      <div class="radar-ring r4"></div>
+      <div class="radar-sweep"></div>
+      <div class="blip b1" style="top:30%; left:64%;"></div>
+      <div class="blip b2" style="top:60%; left:26%;"></div>
+      <div class="blip b3" style="top:22%; left:34%;"></div>
+      <div class="blip b4" style="top:70%; left:66%;"></div>
+      <div class="radar-center">
+        <div class="big">SINAL ATIVO</div>
+        <div class="small">escaneando negócios locais</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<!-- ==============================================================
-     Ordem dos scripts importa: db -> messageProvider -> contacts ->
-     campaign -> dispatcher -> dashboard -> history -> app (bootstrap)
-     ================================================================ -->
-<script src="js/db.js"></script>
-<script src="js/messageProvider.js"></script>
-<script src="js/contacts.js"></script>
-<script src="js/campaign.js"></script>
-<script src="js/dispatcher.js"></script>
-<script src="js/dashboard.js"></script>
-<script src="js/history.js"></script>
-<script src="js/app.js"></script>
-</body>
-</html>
+<section id="como-funciona">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Como funciona</span>
+      <h2>Três passos entre "não conheço esse negócio" e uma proposta pronta.</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="idx">PASSO 1</div>
+        <h3>Buscar</h3>
+        <p>Informe cidade e nicho na ferramenta abaixo. Ela localiza os negócios da região — nome, avaliação, nº de avaliações, se tem site e redes sociais ativas.</p>
+      </div>
+      <div class="step">
+        <div class="idx">PASSO 2</div>
+        <h3>Diagnosticar</h3>
+        <p>Cada negócio recebe uma nota de presença digital e uma lista automática de pontos fortes e fracos — sem você precisar analisar nada manualmente.</p>
+      </div>
+      <div class="step">
+        <div class="idx">PASSO 3</div>
+        <h3>Prospectar</h3>
+        <p>Com base nas fraquezas encontradas, o Radar já sugere quais dos seus serviços oferecer primeiro e o valor de mercado pra cobrar — pronto pra virar mensagem de abordagem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ferramenta">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Ferramenta de prospecção</span>
+      <h2>Escaneie uma cidade e um nicho</h2>
+      <p>Por padrão a busca roda em <strong>modo demonstração</strong>, com dados simulados realistas — dá pra testar o fluxo inteiro agora mesmo. Pra puxar negócios reais do Google, abra "Busca 100% real" e cole sua chave gratuita da Google Places API.</p>
+    </div>
+
+    <div class="tool-panel">
+      <form class="tool-form" id="searchForm">
+        <div class="field">
+          <label for="cidade">Cidade</label>
+          <input type="text" id="cidade" placeholder="Ex: Maringá, PR" required>
+        </div>
+        <div class="field">
+          <label for="nicho">Nicho / tipo de negócio</label>
+          <input type="text" id="nicho" placeholder="Ex: clínicas odontológicas" required>
+        </div>
+        <div class="field submit">
+          <button type="submit" class="btn btn-primary">Escanear região</button>
+        </div>
+      </form>
+
+      <details class="advanced-toggle">
+        <summary>Busca 100% real (Google Places API)</summary>
+        <div class="advanced-box">
+          <p>Sem chave configurada, a ferramenta usa dados simulados pra você testar o fluxo. Pra deixar a busca real <strong>sempre ativa</strong>, sem precisar colar nada aqui toda vez, gere sua chave gratuita e cole direto no código do site (linha <code>GOOGLE_PLACES_API_KEY</code>, no início do &lt;script&gt;):</p>
+          <ol>
+            <li>Acesse <code>console.cloud.google.com</code>, crie um projeto e ative a <strong>Places API (New)</strong>.</li>
+            <li>Em "Credenciais", gere uma chave de API e restrinja por domínio (referrer HTTP) onde este site for publicado.</li>
+            <li>Cole a chave na constante <code>GOOGLE_PLACES_API_KEY</code> no código, ou temporariamente aqui embaixo só pra testar nesta sessão.</li>
+          </ol>
+          <div class="key-row">
+            <input type="text" id="apiKey" placeholder="Cole aqui pra testar nesta sessão (opcional)">
+          </div>
+        </div>
+      </details>
+
+      <div id="resultsMeta"></div>
+      <div id="results">
+        <div class="empty-state">Nenhuma busca rodada ainda. Preencha cidade e nicho acima e clique em "Escanear região".</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="servicos">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Catálogo de serviços</span>
+      <h2>O que oferecer depois do diagnóstico</h2>
+      <p>Os 8 serviços que você já presta, mais 2 que costu
